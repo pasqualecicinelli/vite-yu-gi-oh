@@ -7,14 +7,14 @@ export default {
   data() {
     return {};
   },
-  components: { AppHeader, AppMain },
+  components: { AppHeader, AppMain,},
 };
 </script>
 
 <template>
   <AppHeader />
-  <AppMain />
 
+  <AppMain />
 </template>
 
 <style lang="scss">

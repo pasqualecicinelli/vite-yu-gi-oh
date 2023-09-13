@@ -1,22 +1,40 @@
 <script>
 import PaperList from "./PaperList.vue";
+import BaseSelect from "./BaseSelect.vue";
+import axios from "axios";
 
 export default {
   data() {
-    return {};
+    return {
+      apiUriArchetype: "https://db.ygoprodeck.com/api/v7/archetypes.php",
+      arrayArchetype:[],
+    };
   },
-  components: { PaperList },
+  components: { PaperList, BaseSelect },
+
+  methods: {
+    fetchArchetype(endpoint) {
+      axios.get(endpoint).then((response) => {
+        this.arrayArchetype = response.data;
+      });
+    },
+  },
+  created() {
+    
+    this.fetchArchetype(this.apiUriArchetype);
+  },
+
 };
 </script>
 
 <template>
   <main>
-
+    <BaseSelect :types="arrayArchetype"/>
     <div class="container">
       <div class="row flex-wrap">
         <div class="container-col mt-5">
           <div class="col">
-            <h5 class="found-card">Found 39 card</h5>
+            <h5 class="found-card">Found 39 cards</h5>
             <PaperList />
           </div>
         </div>
@@ -30,7 +48,7 @@ export default {
 
 main {
   width: 100%;
-  height: 100vh;
+  height: 100%;
   background-color: $dark-gold;
   padding-top: 5rem;
   position: relative;
@@ -39,7 +57,6 @@ main {
     max-width: 1200px;
     height: 100%;
     background-color: white;
-
 
     .col {
       width: 100%;
