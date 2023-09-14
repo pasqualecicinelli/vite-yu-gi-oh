@@ -7,7 +7,10 @@ export default {
   data() {
     return {
       apiUriArchetype: "https://db.ygoprodeck.com/api/v7/archetypes.php",
-      arrayArchetype:[],
+      arrayArchetype: [],
+      apiUri: "https://db.ygoprodeck.com/api/v7/cardinfo.php?num=20&offset=0",
+      arrayCardsPlay: [],
+      tipoFiltrato: "",
     };
   },
   components: { PaperList, BaseSelect },
@@ -18,24 +21,40 @@ export default {
         this.arrayArchetype = response.data;
       });
     },
+    fetchCarte() {
+      let url = this.apiUri;
+
+      if (this.tipoFiltrato != "") {
+        url += `&archetype=${this.tipoFiltrato}`;
+      }
+      axios.get(url).then((response) => {
+        this.arrayCardsPlay = response.data.data;
+      });
+    },
+    filterType(term) {
+      this.tipoFiltrato = term;
+
+      this.fetchCarte();
+    },
   },
   created() {
-    
     this.fetchArchetype(this.apiUriArchetype);
+    this.fetchCarte();
   },
-
 };
 </script>
 
 <template>
   <main>
-    <BaseSelect :types="arrayArchetype"/>
+    <BaseSelect :types="arrayArchetype" @select-type="filterType" />
+
     <div class="container">
       <div class="row flex-wrap">
         <div class="container-col mt-5">
           <div class="col">
-            <h5 class="found-card">Found 39 cards</h5>
-            <PaperList />
+            <h5 class="found-card">Found {{ arrayCardsPlay.length }} cards</h5>
+
+            <PaperList :cardList="arrayCardsPlay" />
           </div>
         </div>
       </div>

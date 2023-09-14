@@ -1,52 +1,29 @@
 <script>
-import axios from "axios";
-import BaseSelect from "./BaseSelect.vue";
-
 export default {
   data() {
     return {
-      apiUri: "https://db.ygoprodeck.com/api/v7/cardinfo.php?num=20&offset=0",
-      arrayCardsPlay: [],
       countInsideArray: 0,
-    
     };
   },
 
-  methods: {
-    fetchCarte(endpoint) {
-      axios.get(endpoint).then((response) => {
-        this.arrayCardsPlay = response.data.data;
-      });
-    },
+  methods: {},
 
- 
+  props: {
+    cardList: Array,
   },
-  components:{BaseSelect},
 
-  created() {
-    this.fetchCarte(this.apiUri);
-   
-  },
+  created() {},
 };
 </script>
 
 <template>
-
-  <div
-    class="card-img"
-    v-for="(lista, index) in this.arrayCardsPlay"
-    :key="lista.id"
-  >
+  <div class="card-img" v-for="(lista, index) in this.cardList" :key="lista.id">
     <img :src="lista.card_images[this.countInsideArray].image_url" alt="" />
     <div class="text-center">
       <p>{{ lista.name.toUpperCase() }}</p>
-      <p>{{ lista.archetype }}</p>    
-
+      <p>{{ lista.archetype }}</p>
     </div>
   </div>
-  
-
-
 </template>
 
 <style lang="scss" scoped>
